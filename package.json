@@ -1,0 +1,31 @@
+{
+  "name": "forky",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/brianc/node-forky.git"
+  },
+  "keywords": [
+    "cluster",
+    "pre-fork"
+  ],
+  "author": "Brian M. Carlson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/brianc/node-forky/issues"
+  },
+  "devDependencies": {
+    "okay": "~0.3.0",
+    "mocha": "~1.12.0",
+    "express": "~3.3.4",
+    "request": "~2.25.0",
+    "async": "~0.2.9",
+    "sliced": "0.0.5",
+    "express-domain-middleware": "~0.1.0"
+  }
+}

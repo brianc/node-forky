@@ -18,7 +18,12 @@ var log = function() {
 }
 
 var app = express();
+//use simple express-domain-middleware
+//to automatically route all errors for a given request
+//back to the express error handler
 app.use(require('express-domain-middleware'));
+
+//add the router after the domain middleware
 app.use(app.router);
 
 //express error handler
@@ -32,22 +37,22 @@ app.use(function(err, req, res, next) {
   res.send(500, workerId() + ' request error');
 });
 
+//simple route just returning a 200 OK response
 app.get('/', function(req, res, next) {
   res.send(workerId() + " OK")
 });
 
 //throw an unhandled error which will be caught
-//by the domain
+//by express-domain-middleware
 app.get('/crash', function(req, res, next) {
   process.nextTick(function() {
     throw new Error("PWND BROTHER");
   });
 });
 
-//tell this process to exit immediately after
+//the /exit route forces this process to exit once
 //this response has completed
-//forky will respawn another work when this one
-//dies
+//forky will automatically respawn another process when this one dies
 app.get('/exit', function(req, res, next) {
   res.on('finish', function() {
     console.log('res closed!')
@@ -56,10 +61,10 @@ app.get('/exit', function(req, res, next) {
   res.send(workerId() + ' exit');
 });
 
-//send the disconnect signal to forky
-//this will behave in the same way as the error handler
+//the /disconnect route will send the disconnect signal to forky
+//this will behave in the same way as the express error handler above.
 //no more requests will be handled on this worker and
-//this worker will be allowed to gracefully die
+//this worker will be allowed to gracefully die once all in-flight requests complete
 app.get('/disconnect', function(req, res, next) {
   process.nextTick(function() {
     log(workerId() + ' disconnecting from master');
@@ -68,12 +73,13 @@ app.get('/disconnect', function(req, res, next) {
   });
 });
 
-//the worker will likely have references keeping it event loop
+//in practice the worker process will likely have references keeping the event loop
 //alive forever. These can be things like open database connections
 //in a pool of connected clients or other long living timeouts.
 //if you want to force a disconnection and total worker shutdown/cleanup
 //after a specific timeout you can pass a timeout to disconnect.
-//after this timeout forky will forcefully kill this worker
+//after this timeout forky will forcefully kill this worker if it hasn't 
+//already exited
 app.get('/disconnect/:timeout', function(req, res, next) {
   var timeout = req.params.timeout;
   setInterval(function() {

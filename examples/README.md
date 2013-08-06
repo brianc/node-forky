@@ -1,6 +1,10 @@
 ## examples
 
-### install
+### learn
+
+Read [server.js](https://github.com/brianc/node-forky/blob/master/examples/server.js) for some reference implementations on how to do various things with forky and the cluster module.
+
+### install & run
 
 clone the repo
 `npm install`

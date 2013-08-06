@@ -1,4 +1,5 @@
 var express = require('express');
+var domain = require('domain');
 var cluster = require('cluster');
 var forky = require('../');
 var http = require('http');
@@ -18,10 +19,16 @@ var log = function() {
 }
 
 var app = express();
-//use simple express-domain-middleware
+//use simple domain middleware
 //to automatically route all errors for a given request
 //back to the express error handler
-app.use(require('express-domain-middleware'));
+app.use(function(req, res, next) {
+  var d = domain.create();
+  d.on('error', next);
+  d.add(req);
+  d.add(res);
+  d.run(next);
+});
 
 //add the router after the domain middleware
 app.use(app.router);

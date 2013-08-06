@@ -126,7 +126,13 @@ process.on('uncaughtException', function(err) {
 
 All of the above is to help with graceful shutdowns.  Forky doesn't actually need you to signal disconnect from your workers. You can just let the exception crash the process, you can call `process.exit()`, or do anything else you want to clean up. Once your worker closes, regardless of the reason, forky will spawn a new one.
 
+## Contributing
 
+I love contributions.  If you'd like to contribute a bug fix, send in yer pull requests!  
+
+If you want to add a more substantial feature open an issue, and let's discuss it. We can turn that issue into a pull request and get new features added. Open Source Is Awesome. :+1:
+
+Due to the race-condition type nature of managing a cluster of workers the tests don't use a test framework, they just batter the hell out of the example server and make sure it never returns an unexpected result.  To run the tests just type `make` after cloning & doing an `npm install`
 ## License
 
 Copyright (c) 2013 Brian M. Carlson

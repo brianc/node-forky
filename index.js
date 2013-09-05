@@ -7,7 +7,7 @@ var killTimeout = function(worker, timeout) {
   forky.log('setting kill timeout of', timeout, 'for worker', worker.id);
   var tid = setTimeout(function() {
     forky.log('worker', worker.id, 'did not shutdown after timeout', timeout, 'killing');
-    worker.kill();
+    worker.destroy();
   }, timeout);
   worker.once('exit', function() {
     forky.log('worker', worker.id, 'died. clear kill timeout');

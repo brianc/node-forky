@@ -128,12 +128,12 @@ All of the above is to help with graceful shutdowns.  Forky doesn't actually nee
 
 ### setting number of workers
 
-Forky takes an option second argument, an integer, and will use that as the number of workers to spawn instead of spawning based on the number of cores you have.  Example:
+Forky takes an optional second argument, an integer, and will use that as the number of workers to spawn instead of spawning based on the number of cores you have.  Example:
 
 ```js
 var forky = require('forky')
 forky(__dirname + '/index.js', 100, function(err) {
-  console.log('you spawned 100 workers. That's a lot.')
+  console.log("you spawned 100 workers. That's a lot.")
 })
 ```
 

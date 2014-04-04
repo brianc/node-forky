@@ -1,6 +1,8 @@
 node-forky
 ==========
 
+[![Build Status](https://travis-ci.org/brianc/node-forky.svg?branch=master)](https://travis-ci.org/brianc/node-forky)
+
 Forky makes using the cluster module easier without preventing you from using it directly.
 
 __Problem__: using `require('cluster')` properly is difficult, error prone, and hard to test.  

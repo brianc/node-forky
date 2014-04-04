@@ -126,6 +126,17 @@ process.on('uncaughtException', function(err) {
 
 All of the above is to help with graceful shutdowns.  Forky doesn't actually need you to signal disconnect from your workers. You can just let the exception crash the process, you can call `process.exit()`, or do anything else you want to clean up. Once your worker closes, regardless of the reason, forky will spawn a new one.
 
+### setting number of workers
+
+Forky takes an option second argument, an integer, and will use that as the number of workers to spawn instead of spawning based on the number of cores you have.  Example:
+
+```js
+var forky = require('forky')
+forky(__dirname + '/index.js', 100, function(err) {
+  console.log('you spawned 100 workers. That's a lot.')
+})
+```
+
 ## Contributing
 
 I love contributions.  If you'd like to contribute a bug fix, send in yer pull requests!  

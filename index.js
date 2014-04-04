@@ -40,18 +40,21 @@ var forkWorker = function() {
   });
 };
 
-forky = module.exports = function(path, cb) {
+forky = module.exports = function(path, workerCount, cb) {
+  if(typeof workerCount == 'function') {
+    cb = workerCount
+    workerCount = os.cpus().length
+  }
   cluster.setupMaster({
     exec: path
   });
-  var cores = os.cpus().length;
-  forky.log('starting', cores, 'workers');
-  for(var i = 0; i < cores; i++) {
+  forky.log('starting', workerCount, 'workers');
+  for(var i = 0; i < workerCount; i++) {
     forkWorker();
   }
   var listeningWorkers = 0;
   cluster.on('listening', function(worker) {
-    if(++listeningWorkers == cores) {
+    if(++listeningWorkers == workerCount) {
       cb ? cb(null, cluster) : function(){};
     }
   });

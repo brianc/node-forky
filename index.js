@@ -41,7 +41,7 @@ var forkWorker = function() {
 };
 
 forky = module.exports = function(path, workerCount, cb) {
-  if(typeof workerCount == 'function') {
+  if(typeof workerCount == 'function' || typeof workerCount == 'undefined') {
     cb = workerCount
     workerCount = os.cpus().length
   }

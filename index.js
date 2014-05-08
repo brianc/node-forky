@@ -22,8 +22,8 @@ var forkWorker = function() {
   forky.log('forked worker', worker.id);
   //set up a listener for the disconnect message
   //a worker can send this by calling `forky.disconnect([timeout])`
-  worker.once('message', function(msg) {
-    if(!msg.action == 'disconnect') return;
+  worker.on('message', function(msg) {
+    if(msg.action != 'disconnect') return;
     forkWorker();
     worker.disconnect();
 

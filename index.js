@@ -64,7 +64,7 @@ forky = module.exports = function(path, workerCount, cb) {
 //forky will automatically spawn a new worker in its place
 forky.disconnect = function(timeout) {
   if(!cluster.isWorker) {
-    throw new Exception("You are not a worker");
+    throw new Error("You are not a worker");
   }
   var worker = cluster.worker;
   if(worker.state == 'disconnecting') return;

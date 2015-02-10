@@ -3,7 +3,10 @@ var os = require('os');
 
 var shuttingDown = false;
 
-var killTimeout = function(worker, timeout) {
+var KILL_TIMEOUT = 1000;
+var LOG = false;
+
+function killTimeout(worker, timeout) {
   forky.log('setting kill timeout of', timeout, 'for worker', worker.id);
   var tid = setTimeout(function() {
     forky.log('worker', worker.id, 'did not shutdown after timeout', timeout, 'killing');
@@ -16,7 +19,7 @@ var killTimeout = function(worker, timeout) {
 }
 
 //fork a new worker
-var forkWorker = function() {
+function forkWorker() {
   if(shuttingDown) return;
   var worker = cluster.fork();
   forky.log('forked worker', worker.id);
@@ -36,29 +39,53 @@ var forkWorker = function() {
     if(worker.suicide) return;
     forkWorker();
     //set short kill timeout for unexpected worker shutdown
-    killTimeout(worker, 1000);
+    killTimeout(worker, KILL_TIMEOUT);
   });
-};
+}
 
-forky = module.exports = function(path, workerCount, cb) {
-  if(typeof workerCount == 'function' || typeof workerCount == 'undefined') {
-    cb = workerCount
-    workerCount = os.cpus().length
+var forky = module.exports = function(options, workerCount, cb) {
+  var path;
+  if (typeof(options) === 'string') {
+    // this is here for backwards compatibility to 0.1.2, remove this when we hit 1.0.0
+    path = options;
+    if(typeof workerCount == 'function') {
+      cb = workerCount;
+      workerCount = undefined;
+    }
   }
+  else {
+    path = options.path;
+    workerCount = options.workers;
+    cb = options.callback;
+    
+    if (options.enable_logging !== undefined) {
+      LOG = options.enable_logging;
+    }
+    if (options.kill_timeout !== undefined) {
+      KILL_TIMEOUT = options.kill_timeout;
+    }
+  }
+  
+  if (undefined === workerCount) {
+    workerCount = os.cpus().length;
+  }
+
   cluster.setupMaster({
     exec: path
   });
+
   forky.log('starting', workerCount, 'workers');
   for(var i = 0; i < workerCount; i++) {
     forkWorker();
   }
+
   var listeningWorkers = 0;
   cluster.on('listening', function(worker) {
     if(++listeningWorkers == workerCount) {
       cb ? cb(null, cluster) : function(){};
     }
   });
-}
+};
 
 //call this from a worker to disconnect the worker
 //forky will automatically spawn a new worker in its place
@@ -82,4 +109,7 @@ forky.disconnect = function(timeout) {
 //want some detailed log messages about what
 //forky is doing with your workers
 forky.log = function() {
+    if (LOG) {
+        console.log.apply(console, arguments);
+    }
 };

@@ -3,10 +3,6 @@ var async = require('async');
 var ok = require('okay')
 var assert = require('assert');
 var request = require('request');
-var forky = require('../');
-forky.log = function() {
-  console.log.apply(console, arguments);
-}
 
 var helper = module.exports = {
   serverPath: __dirname + '/../examples/server',

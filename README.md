@@ -12,7 +12,7 @@ __Solution__:
 __master.js__
 ```js
 var forky = require('forky');
-forky(__dirname + '/worker.js');
+forky({path: __dirname + '/worker.js'});
 ```
 
 __worker.js__
@@ -52,12 +52,12 @@ _example: if you used to type `node index.js` to start your application, your ma
 __master.js__
 ```js
 var forky = require('forky');
-forky(__dirname + '/index.js');
+forky({path: __dirname + '/index.js'});
 ```
 
 What forky will do is spawn a number of workers equal to the number of cores you have available on your system.  
 If one of these workers disconnects for __any reason__ due to a process.uncaughtException or even a `kill -9 <pid>` to the worker process, forky will spawn a new worker immedately.  
-After forky has spawned a new worker it will attempt to gracefully shut down your disconnecte worker.  After a timeout if your disconnected worker is still running, forky will forcefully kill it.
+After forky has spawned a new worker it will attempt to gracefully shut down your disconnected worker.  After a timeout if your disconnected worker is still running, forky will forcefully kill it.
 
 
 The best way to handle unexpected errors in node is to shut down your process and spawn a new one. Forky makes clean process shutdown & respawn easy as pie.
@@ -128,16 +128,15 @@ process.on('uncaughtException', function(err) {
 
 All of the above is to help with graceful shutdowns.  Forky doesn't actually need you to signal disconnect from your workers. You can just let the exception crash the process, you can call `process.exit()`, or do anything else you want to clean up. Once your worker closes, regardless of the reason, forky will spawn a new one.
 
-### setting number of workers
+### Options
 
-Forky takes an optional second argument, an integer, and will use that as the number of workers to spawn instead of spawning based on the number of cores you have.  Example:
+can take several options in addition to the file path:
 
-```js
-var forky = require('forky')
-forky(__dirname + '/index.js', 100, function(err) {
-  console.log("you spawned 100 workers. That's a lot.")
-})
-```
+* `path` - The path to the file to launcher for workers
+* `workers` - The number of workers to launch (default: the number of cores)
+* `callback` - A callback to call when forky has launched the workers
+* `enable_logging` - Whether to enable forky logging (default: `false`)
+* `kill_timeout` - The kill timeout (milliseconds) to use if a worker does not kill shutdown properly and is not given a timeout when it is told to disconnect (default: `1000`)
 
 ## Contributing
 

@@ -4,10 +4,14 @@ var assert = require('assert');
 
 
 
-var master = forky(helper.serverPath, function(err, master) {
-  console.log('workers listening');
-  helper.slam('/disconnect', 200, function(err) {
-    assert.ifError(err);
-    master.disconnect();
-  });
+var master = forky({
+  path: helper.serverPath,
+  enable_logging: true,
+  callback: function(err, master) {
+    console.log('workers listening');
+    helper.slam('/disconnect', 200, function(err) {
+      assert.ifError(err);
+      master.disconnect();
+    });
+  }
 });

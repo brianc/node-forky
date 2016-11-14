@@ -70,9 +70,39 @@ var forky = module.exports = function(options, workerCount, cb) {
     workerCount = os.cpus().length;
   }
 
-  cluster.setupMaster({
-    exec: path
-  });
+  // setup cluster if running with istanbul coverage
+  if(cluster.isMaster && process.env.running_under_istanbul) {
+    var istanbulOpts = options.istanbul || {};
+
+    // use coverage for forked process
+    // disabled reporting and output for child process
+    // enable pid in child process coverage filename
+    var commandArgs = ["cover", "--report", "none", "--print", "none", "--include-pid", "--dir"];
+
+    // set the istanbul coverage reporting directory
+    commandArgs.push(istanbulOpts.coverageDir || "./coverage");
+
+    // add any exclusions specified for istanbul
+    if(istanbulOpts.excludes && istanbulOpts.excludes.length) {
+      istanbulOpts.excludes.forEach(function(exclude) {
+        commandArgs.push("-x");
+        commandArgs.push(exclude);
+      });
+    }
+
+    // last arg is the actual worker process to instrument and then run
+    commandArgs.push(path);
+
+    cluster.setupMaster({
+      exec: "./node_modules/.bin/istanbul",
+      args: commandArgs
+    });
+  }
+  else {
+    cluster.setupMaster({
+      exec: path
+    });
+  }
 
   forky.log('starting', workerCount, 'workers');
   for(var i = 0; i < workerCount; i++) {

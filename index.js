@@ -77,10 +77,16 @@ var forky = module.exports = function(options, workerCount, cb) {
     // use coverage for forked process
     // disabled reporting and output for child process
     // enable pid in child process coverage filename
-    var commandArgs = ["cover", "--report", "none", "--print", "none", "--include-pid", "--dir"];
+    var commandArgs = ["cover", "--handle-sigint", "--report", "json", "--print", "none", "--include-pid", "--dir"];
 
     // set the istanbul coverage reporting directory
     commandArgs.push(istanbulOpts.coverageDir || "./coverage");
+
+    if (istanbulOpts.srcRoot) {
+      commandArgs.push("--root");
+      commandArgs.push(istanbulOpts.srcRoot);
+    }
+
 
     // add any exclusions specified for istanbul
     if(istanbulOpts.excludes && istanbulOpts.excludes.length) {

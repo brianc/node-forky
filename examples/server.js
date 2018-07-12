@@ -90,7 +90,7 @@ app.get('/disconnect/:timeout', function(req, res, next) {
 app.use(function(err, req, res, next) {
   log('route error. disconnecting.')
   forky.disconnect()
-  res.send(500, workerId() + ' request error')
+  res.status(500).send(workerId() + ' request error')
 })
 var server = http.createServer(app)
 

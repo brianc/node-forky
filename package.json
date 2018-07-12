@@ -3,6 +3,9 @@
   "version": "0.3.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": ">=8.0"
+  },
   "scripts": {
     "test": "make"
   },
@@ -20,8 +23,8 @@
     "url": "https://github.com/brianc/node-forky/issues"
   },
   "devDependencies": {
-    "async": "~0.2.9",
-    "express": "3.x",
+    "async": "^2.6.1",
+    "express": "^4.16.3",
     "request": "^2.87.0",
     "sliced": "0.0.5"
   },

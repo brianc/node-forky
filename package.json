@@ -20,7 +20,6 @@
     "url": "https://github.com/brianc/node-forky/issues"
   },
   "devDependencies": {
-    "okay": "~0.3.0",
     "express": "~3.3.4",
     "request": "~2.25.0",
     "async": "~0.2.9",

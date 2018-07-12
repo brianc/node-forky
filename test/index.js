@@ -1,6 +1,5 @@
 console.log(process.argv[1])
 var async = require('async')
-var ok = require('okay')
 var assert = require('assert')
 var request = require('request')
 
@@ -31,25 +30,19 @@ var helper = (module.exports = {
     }
 
     var disconnect = function(n, cb) {
-      helper.get(
-        '/',
-        ok(cb, function(res) {
-          assert.equal(res.statusCode, 200)
-          helper.get(
-            path,
-            ok(cb, function(res) {
-              assert.equal(res.statusCode, statusCode)
-              helper.get(
-                '/',
-                ok(cb, function(res) {
-                  assert.equal(res.statusCode, 200)
-                  hit(cb)
-                })
-              )
-            })
-          )
+      helper.get('/', function(err, res) {
+        if (err) return cb(err)
+        assert.equal(res.statusCode, 200)
+        helper.get(path, function(err, res) {
+          if (err) return cb(err)
+          assert.equal(res.statusCode, statusCode)
+          helper.get('/', function(err, res) {
+            if (err) return cb(err)
+            assert.equal(res.statusCode, 200)
+            hit(cb)
+          })
         })
-      )
+      })
     }
     async.timesSeries(10, disconnect, cb)
   },

@@ -35,8 +35,8 @@ function forkWorker() {
   })
 
   worker.once('disconnect', function() {
-    forky.log('worker', worker.id, ' disconnected.', 'suicide', worker.suicide)
-    if (worker.suicide) return
+    forky.log('worker', worker.id, ' disconnected.', 'exitedAfterDisconnect', worker.exitedAfterDisconnect)
+    if (worker.exitedAfterDisconnect) return
     forkWorker()
     //set short kill timeout for unexpected worker shutdown
     killTimeout(worker, KILL_TIMEOUT)

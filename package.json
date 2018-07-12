@@ -25,8 +25,7 @@
   "devDependencies": {
     "async": "^2.6.1",
     "express": "^4.16.3",
-    "request": "^2.87.0",
-    "sliced": "0.0.5"
+    "request": "^2.87.0"
   },
   "prettier": {
     "printWidth": 120,

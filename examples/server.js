@@ -3,7 +3,6 @@ var domain = require('domain')
 var cluster = require('cluster')
 var forky = require('../')
 var http = require('http')
-var sliced = require('sliced')
 
 var workerId = function() {
   if (cluster.isWorker) {
@@ -13,7 +12,7 @@ var workerId = function() {
 }
 
 var log = function() {
-  var args = sliced(arguments)
+  var args = Array.prototype.slice.apply(arguments)
   args.unshift(workerId())
   console.log.apply(console, args)
 }

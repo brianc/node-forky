@@ -20,11 +20,10 @@
     "url": "https://github.com/brianc/node-forky/issues"
   },
   "devDependencies": {
-    "express": "~3.3.4",
-    "request": "~2.25.0",
     "async": "~0.2.9",
-    "sliced": "0.0.5",
-    "express-domain-middleware": "~0.1.0"
+    "express": "3.x",
+    "request": "^2.87.0",
+    "sliced": "0.0.5"
   },
   "prettier": {
     "printWidth": 120,

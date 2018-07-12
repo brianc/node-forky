@@ -30,30 +30,16 @@ app.use(function(req, res, next) {
   d.run(next)
 })
 
-//add the router after the domain middleware
-app.use(app.router)
-
-//express error handler
-//which will catch domain errors and respond nicely with a 500
-//after the response, it will disconnect this worker gracefully
-//meaning no more connections will be accepted and once the
-//error connection terminates, the worker will die
-app.use(function(err, req, res, next) {
-  log('route error. disconnecting.')
-  forky.disconnect()
-  res.send(500, workerId() + ' request error')
-})
-
 //simple route just returning a 200 OK response
 app.get('/', function(req, res, next) {
   res.send(workerId() + ' OK')
 })
 
 //throw an unhandled error which will be caught
-//by express-domain-middleware
+//by the domain middleware
 app.get('/crash', function(req, res, next) {
   process.nextTick(function() {
-    throw new Error('PWND BROTHER')
+    throw new Error('Expected error thrown in /crash')
   })
 })
 
@@ -96,6 +82,16 @@ app.get('/disconnect/:timeout', function(req, res, next) {
   res.send(workerId() + 'disconnecting in ' + timeout + ' miliseconds')
 })
 
+//express error handler
+//which will catch domain errors and respond nicely with a 500
+//after the response, it will disconnect this worker gracefully
+//meaning no more connections will be accepted and once the
+//error connection terminates, the worker will die
+app.use(function(err, req, res, next) {
+  log('route error. disconnecting.')
+  forky.disconnect()
+  res.send(500, workerId() + ' request error')
+})
 var server = http.createServer(app)
 
 process.on('exit', function() {

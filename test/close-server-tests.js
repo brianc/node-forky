@@ -1,17 +1,15 @@
-var helper = require('./');
-var forky = require('../');
-var assert = require('assert');
-
-
+var helper = require('./')
+var forky = require('../')
+var assert = require('assert')
 
 var master = forky({
   path: helper.serverPath,
   enable_logging: true,
   callback: function(err, master) {
-    console.log('workers listening');
+    console.log('workers listening')
     helper.slam('/disconnect', 200, function(err) {
-      assert.ifError(err);
-      master.disconnect();
-    });
-  }
-});
+      assert.ifError(err)
+      master.disconnect()
+    })
+  },
+})

@@ -1,6 +1,6 @@
-var forky = require('../');
+var forky = require('../')
 
 forky({
   path: __dirname + '/server',
-  enable_logging: true
-});
+  enable_logging: true,
+})

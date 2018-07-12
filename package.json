@@ -26,5 +26,11 @@
     "async": "~0.2.9",
     "sliced": "0.0.5",
     "express-domain-middleware": "~0.1.0"
+  },
+  "prettier": {
+    "printWidth": 120,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
   }
 }

@@ -63,6 +63,9 @@ var forky = (module.exports = function(options, workerCount, cb) {
     if (options.kill_timeout !== undefined) {
       KILL_TIMEOUT = options.kill_timeout
     }
+    if (options.scheduling_policy !== undefined) {
+      cluster.schedulingPolicy = options.scheduling_policy;
+    }
   }
 
   if (undefined === workerCount) {

@@ -137,6 +137,7 @@ can take several options in addition to the file path:
 * `callback` - A callback to call when forky has launched the workers
 * `enable_logging` - Whether to enable forky logging (default: `false`)
 * `kill_timeout` - The kill timeout (milliseconds) to use if a worker does not kill shutdown properly and is not given a timeout when it is told to disconnect (default: `1000`)
+* `scheduling_policy`` - The scheduling policy to use for cluster.
 
 ## Contributing
 

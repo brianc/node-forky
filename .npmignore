@@ -1,0 +1,5 @@
+examples
+Makefile
+node_modules
+test
+.travis.yml

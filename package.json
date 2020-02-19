@@ -24,9 +24,9 @@
     "url": "https://github.com/brianc/node-forky/issues"
   },
   "devDependencies": {
-    "async": "^2.6.1",
-    "express": "^4.16.3",
-    "request": "^2.87.0"
+    "async": "^3.1.1",
+    "express": "^4.17.1",
+    "request": "^2.88.2"
   },
   "prettier": {
     "printWidth": 120,
